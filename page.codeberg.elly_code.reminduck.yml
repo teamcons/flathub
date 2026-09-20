@@ -1,0 +1,40 @@
+id: page.codeberg.elly_code.reminduck
+# elementary SDK is not available on Flathub, so use the elementary BaseApp instead
+base: io.elementary.BaseApp
+base-version: 'tanit-26.08'
+runtime: org.gnome.Platform
+runtime-version: '51'
+sdk: org.gnome.Sdk
+command: page.codeberg.elly_code.reminduck
+
+finish-args:
+  - --share=ipc
+  - --device=dri
+  - --socket=fallback-x11
+  - --socket=wayland
+  # Required to do a quack sound
+  - --socket=pulseaudio
+
+cleanup:
+  - /include
+  - /lib/girepository-1.0
+  - /lib/pkgconfig
+  - /share/gir-1.0
+  - /share/vala
+
+cleanup-commands:
+  - /app/cleanup-BaseApp.sh
+
+modules:
+  - name: reminduck
+    buildsystem: meson
+    config-opts:
+      - --buildtype=release
+    sources:
+      - type: git
+        url: https://codeberg.org/elly-code/reminduck.git
+        tag: 2.5.0
+        commit: 66c23ee3960abc5c561f13b2a8a9a0500c8b3685
+        x-checker-data:
+          type: git
+          tag-pattern: '^([\d.]+)$'
